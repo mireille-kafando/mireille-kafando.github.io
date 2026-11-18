@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mireille Kafando — Portfolio</title>
+<meta name="description" content="Portfolio de Mireille Kafando : apprentissage automatique appliqué au logiciel, prédiction des défauts, vision par ordinateur, analyse statistique.">
+<style>
+  :root{
+    --ink:#1d2433; --muted:#5b6475; --line:#e3e6ec; --bg:#fbfaf7; --card:#ffffff;
+    --accent:#1f5f8b; --accent-soft:#e8f0f6; --warn:#8a5a00; --warn-soft:#fbf3e3;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:"Source Sans 3","Segoe UI",system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;font-size:17px}
+  a{color:var(--accent)}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+  header.top{position:sticky;top:0;background:rgba(251,250,247,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);z-index:10}
+  header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{font-weight:700;letter-spacing:.2px;text-decoration:none;color:var(--ink)}
+  .right{display:flex;align-items:center;white-space:nowrap}
+  nav a{margin-left:22px;text-decoration:none;color:var(--muted);font-size:15px}
+  nav a:hover{color:var(--ink)}
+  .lang{margin-left:22px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:4px 12px;font:inherit;font-size:14px;cursor:pointer}
+  .hero{padding:72px 0 48px}
+  .hero h1{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:44px;line-height:1.15;margin:0 0 12px}
+  .hero .role{font-size:20px;color:var(--muted);margin:0 0 22px}
+  .hero p.lead{max-width:720px;margin:0 0 26px}
+  .btns a{display:inline-block;margin:0 10px 10px 0;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px}
+  .btn-main{background:var(--ink);color:#fff}
+  .btn-ghost{border:1px solid var(--line);color:var(--ink);background:var(--card)}
+  .facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .facts span{background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:4px 12px;font-size:14px}
+  section{padding:40px 0;border-top:1px solid var(--line)}
+  h2{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:28px;margin:0 0 24px}
+  .feature{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px;margin-bottom:28px}
+  .feature img{width:100%;border-radius:8px;border:1px solid var(--line);background:#fff}
+  .tag{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--accent);font-weight:700}
+  .feature h3,.card h3{margin:6px 0 10px;font-size:22px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+  .card img{width:100%;height:180px;object-fit:contain;background:#fff;border-bottom:1px solid var(--line);padding:8px}
+  .card .body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
+  .card h3{font-size:19px}
+  .card p{margin:0 0 12px;font-size:16px}
+  .result{font-weight:600}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 14px}
+  .chips span{border:1px solid var(--line);border-radius:6px;padding:1px 8px;font-size:13px;color:var(--muted)}
+  .note{background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:14px;margin:0 0 14px}
+  .more{margin-top:auto;font-weight:600;text-decoration:none}
+  .skills{display:grid;grid-template-columns:repeat(2,1fr);gap:16px 40px}
+  .skills h4{margin:0 0 4px;font-size:16px}
+  .skills p{margin:0;color:var(--muted)}
+  .timeline div{display:grid;grid-template-columns:120px 1fr;gap:16px;margin-bottom:14px}
+  .timeline b{color:var(--muted);font-weight:600}
+  footer{padding:36px 0 56px;color:var(--muted);font-size:15px;border-top:1px solid var(--line)}
+  [data-lang="en"]{display:none}
+  body.en [data-lang="fr"]{display:none}
+  body.en [data-lang="en"]{display:revert}
+  @media (max-width:860px){
+    .feature{grid-template-columns:1fr}
+    .grid{grid-template-columns:1fr}
+    .skills{grid-template-columns:1fr}
+    nav a{display:none}
+    .hero h1{font-size:34px}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#">Mireille Kafando</a>
+    <div class="right">
+      <nav>
+        <a href="#projets"><span data-lang="fr">Projets</span><span data-lang="en">Projects</span></a>
+        <a href="#competences"><span data-lang="fr">Compétences</span><span data-lang="en">Skills</span></a>
+        <a href="#parcours"><span data-lang="fr">Parcours</span><span data-lang="en">Background</span></a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="lang" id="lang" aria-label="Changer de langue / switch language">English</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero" style="border-top:0">
+    <h1>Mireille Kafando</h1>
+    <p class="role">
+      <span data-lang="fr">Apprentissage automatique appliqué au logiciel · qualité logicielle · analyse de données</span>
+      <span data-lang="en">Machine learning for software · software quality · data analysis</span>
+    </p>
+    <p class="lead" data-lang="fr">Titulaire d'une maîtrise en mathématiques et informatique appliquées (concentration génie logiciel) de l'Université du Québec à Trois-Rivières, j'ai consacré mon mémoire à la prédiction des défauts logiciels par apprentissage profond. Un article qui en est tiré a été accepté à WSSE 2026. Je cherche un premier poste au Québec en développement, en données ou en assurance qualité.</p>
+    <p class="lead" data-lang="en">I hold a Master's degree in Applied Mathematics and Computer Science (software engineering) from Université du Québec à Trois-Rivières. My thesis studies software defect prediction with deep learning, and a paper based on it was accepted at WSSE 2026. I am looking for a junior position in Quebec in development, data or quality assurance.</p>
+    <div class="btns">
+      <a class="btn-main" href="#projets"><span data-lang="fr">Voir les projets</span><span data-lang="en">See projects</span></a>
+      <a class="btn-ghost" href="https://github.com/mireille-kafando">GitHub</a>
+    </div>
+    <div class="facts">
+      <span>Trois-Rivières, QC</span>
+      <span data-lang="fr">M. Sc., UQTR, 2026</span><span data-lang="en">M.Sc., UQTR, 2026</span>
+      <span data-lang="fr">Article accepté à WSSE 2026</span><span data-lang="en">Paper accepted at WSSE 2026</span>
+    </div>
+  </section>
+
+  <section id="projets">
+    <h2><span data-lang="fr">Projets</span><span data-lang="en">Projects</span></h2>
+
+    <div class="feature">
+      <div>
+        <div class="tag"><span data-lang="fr">Mémoire de maîtrise</span><span data-lang="en">Master's thesis</span></div>
+        <h3><span data-lang="fr">Prédiction des défauts logiciels : CNN ou Transformers ?</span><span data-lang="en">Software defect prediction: CNNs or Transformers?</span></h3>
+        <p data-lang="fr">Environ 45 configurations évaluées sur 11 projets Java du corpus PROMISE (41 versions, 15 775 classes) : trois standardisations, plusieurs techniques d'équilibrage, et cinq architectures, du CNN1D aux modèles multimodaux qui combinent métriques et code source avec CodeBERT. Validation intra-projet et inter-projets, G-Mean, tests de Friedman et décomposition de variance.</p>
+        <p data-lang="en">About 45 configurations evaluated on 11 Java projects from the PROMISE corpus (41 versions, 15,775 classes): three standardization strategies, several balancing techniques, and five architectures, from 1D CNNs to multimodal models combining metrics and source code with CodeBERT. Within- and cross-project validation, G-Mean, Friedman tests and variance decomposition.</p>
+        <p class="result" data-lang="fr">Les performances plafonnent à 60–66 % de G-Mean ; le CNN1D simple est le modèle le plus performant et le plus stable en inter-projets (66,6 %), et les caractéristiques des projets expliquent environ 77 % de la variance.</p>
+        <p class="result" data-lang="en">Performance plateaus at 60–66% G-Mean; the simple 1D CNN is the best and most stable cross-project model (66.6%), and project characteristics explain about 77% of the variance.</p>
+        <div class="chips"><span>PyTorch</span><span>TensorFlow/Keras</span><span>Hugging Face</span><span>scikit-learn</span><span>SciPy</span></div>
+        <a class="more" href="https://github.com/mireille-kafando/software-defect-prediction-promise"><span data-lang="fr">Code et résultats →</span><span data-lang="en">Code and results →</span></a>
+      </div>
+      <img src="assets/memoire.png" alt="G-Mean des architectures en WPDP et CPDP">
+    </div>
+
+    <div class="grid">
+      <article class="card">
+        <img src="assets/adas.png" alt="Courbe précision-rappel de YOLOv8">
+        <div class="body">
+          <div class="tag">PIF6004 · <span data-lang="fr">été 2024</span><span data-lang="en">Summer 2024</span></div>
+          <h3><span data-lang="fr">Détection de piétons pour les ADAS</span><span data-lang="en">Pedestrian detection for ADAS</span></h3>
+          <p data-lang="fr">Trois approches comparées (EfficientNetB0, U-Net, YOLOv8) et un jeu de données annoté avec CVAT. Interfaces Streamlit, Gradio et Flask.</p>
+          <p data-lang="en">Three approaches compared (EfficientNetB0, U-Net, YOLOv8) and a dataset annotated with CVAT. Streamlit, Gradio and Flask apps.</p>
+          <p class="result">YOLOv8 : mAP@0,5 = 0,685</p>
+          <div class="chips"><span>YOLOv8</span><span>TensorFlow</span><span>Flask</span></div>
+          <a class="more" href="https://github.com/mireille-kafando/pedestrian-detection-adas"><span data-lang="fr">Voir le dépôt →</span><span data-lang="en">View repository →</span></a>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="assets/pieces.png" alt="Courbe d'exactitude du CNN">
+        <div class="body">
+          <div class="tag">MAP6014 · <span data-lang="fr">automne 2023</span><span data-lang="en">Fall 2023</span></div>
+          <h3><span data-lang="fr">Classification de pièces de monnaie</span><span data-lang="en">Coin classification</span></h3>
+          <p data-lang="fr">VGG16 par transfert et CNN séquentiel sur des pièces indiennes et brésiliennes, avec augmentation de données et interface Streamlit.</p>
+          <p data-lang="en">Transfer learning with VGG16 and a sequential CNN on Indian and Brazilian coins, with data augmentation and a Streamlit app.</p>
+          <p class="result"><span data-lang="fr">98,1 % d'exactitude en test (5 classes)</span><span data-lang="en">98.1% test accuracy (5 classes)</span></p>
+          <div class="chips"><span>TensorFlow/Keras</span><span>Albumentations</span><span>Streamlit</span></div>
+          <a class="more" href="https://github.com/mireille-kafando/coin-classification-cnn"><span data-lang="fr">Voir le dépôt →</span><span data-lang="en">View repository →</span></a>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="assets/csharp.png" alt="Matrice de corrélation des métriques des programmes">
+        <div class="body">
+          <div class="tag">PIF6005 · <span data-lang="fr">hiver 2024</span><span data-lang="en">Winter 2024</span></div>
+          <h3><span data-lang="fr">Statistiques d'une expérimentation C#</span><span data-lang="en">C# experiment statistics</span></h3>
+          <p data-lang="fr">Effet de nouvelles fonctionnalités d'immuabilité en C# sur la qualité du code et la charge de travail : normalité, t de Student, Mann-Whitney.</p>
+          <p data-lang="en">Effect of new C# immutability features on code quality and workload: normality tests, Student's t, Mann-Whitney.</p>
+          <p class="result"><span data-lang="fr">Maintenabilité plus élevée et complexité plus faible (p &lt; 0,01)</span><span data-lang="en">Higher maintainability and lower complexity (p &lt; 0.01)</span></p>
+          <div class="chips"><span>pandas</span><span>SciPy</span><span>Seaborn</span></div>
+          <a class="more" href="https://github.com/mireille-kafando/csharp-immutability-experiment-statistics"><span data-lang="fr">Voir le dépôt →</span><span data-lang="en">View repository →</span></a>
+        </div>
+      </article>
+    </div>
+
+    <p class="note" style="margin-top:24px" data-lang="fr">Chaque dépôt présente le travail tel qu'il a été remis ou publié, avec une section « Écarts relevés » qui documente les limites et erreurs repérées lors d'une relecture ultérieure.</p>
+    <p class="note" style="margin-top:24px" data-lang="en">Each repository reports the work as submitted or published, with a section documenting the limitations and errors found in a later review.</p>
+  </section>
+
+  <section id="competences">
+    <h2><span data-lang="fr">Compétences</span><span data-lang="en">Skills</span></h2>
+    <div class="skills">
+      <div><h4><span data-lang="fr">Langages</span><span data-lang="en">Languages</span></h4><p>Python, Java, C#</p></div>
+      <div><h4><span data-lang="fr">Apprentissage automatique</span><span data-lang="en">Machine learning</span></h4><p>PyTorch, TensorFlow/Keras, Hugging Face Transformers, scikit-learn, imbalanced-learn, Ultralytics YOLO</p></div>
+      <div><h4><span data-lang="fr">Données et statistiques</span><span data-lang="en">Data and statistics</span></h4><p>pandas, NumPy, SciPy, Matplotlib, Seaborn ; <span data-lang="fr">tests paramétriques et non paramétriques, ANOVA</span><span data-lang="en">parametric and non-parametric tests, ANOVA</span></p></div>
+      <div><h4><span data-lang="fr">Génie logiciel</span><span data-lang="en">Software engineering</span></h4><p><span data-lang="fr">Métriques de qualité (CK), vérification et validation, tests</span><span data-lang="en">Quality metrics (CK), verification and validation, testing</span></p></div>
+      <div><h4><span data-lang="fr">Outils</span><span data-lang="en">Tools</span></h4><p>Git, Google Colab, Jupyter, Streamlit, Flask, CVAT</p></div>
+      <div><h4><span data-lang="fr">Langues</span><span data-lang="en">Languages spoken</span></h4><p><span data-lang="fr">Français (langue maternelle), anglais (intermédiaire)</span><span data-lang="en">French (native), English (intermediate)</span></p></div>
+    </div>
+  </section>
+
+  <section id="parcours">
+    <h2><span data-lang="fr">Parcours</span><span data-lang="en">Background</span></h2>
+    <div class="timeline">
+      <div><b>2026</b><span data-lang="fr"><strong>Maîtrise en mathématiques et informatique appliquées</strong>, concentration génie logiciel — Université du Québec à Trois-Rivières. Mémoire : « Analyse comparative des approches de prédiction de fautes logicielles basées sur les architectures CNN et Transformers », sous la direction des professeurs Mourad Badri et Fadel Touré.</span><span data-lang="en"><strong>M.Sc. in Applied Mathematics and Computer Science</strong>, software engineering — Université du Québec à Trois-Rivières. Thesis: comparative analysis of CNN- and Transformer-based software defect prediction, supervised by Profs. Mourad Badri and Fadel Touré.</span></div>
+      <div><b>2026</b><span data-lang="fr"><strong>Article accepté</strong> à WSSE 2026, tiré du mémoire.</span><span data-lang="en"><strong>Paper accepted</strong> at WSSE 2026, based on the thesis.</span></div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p data-lang="fr">Le plus simple est de passer par GitHub : <a href="https://github.com/mireille-kafando">github.com/mireille-kafando</a>.</p>
+    <p data-lang="en">The easiest way to reach me is through GitHub: <a href="https://github.com/mireille-kafando">github.com/mireille-kafando</a>.</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">© 2026 Mireille Kafando</div>
+</footer>
+
+<script>
+  (function () {
+    var btn = document.getElementById('lang');
+    function set(lang) {
+      document.body.classList.toggle('en', lang === 'en');
+      document.documentElement.lang = lang;
+      btn.textContent = lang === 'en' ? 'Français' : 'English';
+      try { localStorage.setItem('lang', lang); } catch (e) {}
+    }
+    var saved = null;
+    try { saved = localStorage.getItem('lang'); } catch (e) {}
+    set(saved === 'en' ? 'en' : 'fr');
+    btn.addEventListener('click', function () {
+      set(document.body.classList.contains('en') ? 'fr' : 'en');
+    });
+  })();
+</script>
+</body>
+</html>
