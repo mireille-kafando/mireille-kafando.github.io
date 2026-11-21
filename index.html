@@ -86,7 +86,7 @@
         <a href="#parcours"><span data-lang="fr">Parcours</span><span data-lang="en">Background</span></a>
         <a href="#contact">Contact</a>
       </nav>
-      <button class="lang" id="lang" aria-label="Changer de langue / switch language">English</button>
+      <button class="lang" id="lang" type="button" lang="en">English</button>
     </div>
   </div>
 </header>
@@ -230,6 +230,7 @@
       document.body.classList.toggle('en', lang === 'en');
       document.documentElement.lang = lang;
       btn.textContent = lang === 'en' ? 'Français' : 'English';
+      btn.lang = lang === 'en' ? 'fr' : 'en';  // le nom du bouton est dans l'autre langue
       try { localStorage.setItem('lang', lang); } catch (e) {}
     }
     var saved = null;
