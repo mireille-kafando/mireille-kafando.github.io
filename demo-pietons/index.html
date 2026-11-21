@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Démo : détection de piétons (YOLOv8) — Mireille Kafando</title>
+<meta name="description" content="Démo en ligne : détection de piétons et de cyclistes avec YOLOv8n, exécutée directement dans le navigateur.">
+<meta property="og:title" content="Démo : détection de piétons avec YOLOv8">
+<meta property="og:description" content="Modèle YOLOv8n entraîné sur Cityscapes, exécuté dans le navigateur avec ONNX Runtime Web.">
+<meta property="og:url" content="https://mireille-kafando.github.io/demo-pietons/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231d2433'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' fill='white' text-anchor='middle'%3EMK%3C/text%3E%3C/svg%3E">
+<style>
+  :root{--ink:#1d2433;--muted:#5b6475;--line:#e3e6ec;--bg:#fbfaf7;--card:#fff;--accent:#1f5f8b;--accent-soft:#e8f0f6;--ped:#d1495b;--rider:#1f8a70}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Source Sans 3","Segoe UI",system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;font-size:17px}
+  a{color:var(--accent)}
+  [data-lang="en"]{display:none} body.en [data-lang="fr"]{display:none} body.en [data-lang="en"]{display:revert}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+  header{border-bottom:1px solid var(--line);background:rgba(251,250,247,.92)}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{font-weight:700;text-decoration:none;color:var(--ink)}
+  .lang{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:4px 12px;font:inherit;font-size:14px;cursor:pointer}
+  h1{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:34px;line-height:1.2;margin:36px 0 8px}
+  .sub{color:var(--muted);margin:0 0 22px;max-width:760px}
+  .grid{display:grid;grid-template-columns:2fr 1fr;gap:24px;align-items:start}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .stage{position:relative;min-height:320px;display:flex;align-items:center;justify-content:center;background:#f3f4f7;border-radius:10px;overflow:hidden}
+  .stage canvas{max-width:100%;height:auto;display:block}
+  .stage.drag{outline:3px dashed var(--accent);outline-offset:-8px}
+  .status{position:absolute;inset:auto 0 0 0;padding:8px 12px;font-size:14px;color:var(--muted);background:rgba(255,255,255,.85)}
+  .btn{display:inline-block;padding:10px 16px;border-radius:8px;font:inherit;font-size:15px;font-weight:600;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+  .btn.main{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .btn:disabled{opacity:.5;cursor:default}
+  .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  label.slider{display:block;margin:4px 0 18px;font-size:15px}
+  input[type=range]{width:100%}
+  .count{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:16px}
+  .count b{font-size:22px}
+  .dot{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:8px;vertical-align:-1px}
+  .muted{color:var(--muted);font-size:14px}
+  .facts{margin:16px 0 0;padding:0;list-style:none;font-size:14px;color:var(--muted)}
+  .facts li{margin:4px 0}
+  footer{border-top:1px solid var(--line);margin-top:40px;padding:20px 0;font-size:14px;color:var(--muted)}
+  @media (max-width:820px){.grid{grid-template-columns:1fr} h1{font-size:28px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="brand" href="../">Mireille Kafando</a>
+  <button class="lang" id="lang" type="button">English</button>
+</div></header>
+
+<main class="wrap">
+  <h1><span data-lang="fr">Détection de piétons pour l'aide à la conduite</span><span data-lang="en">Pedestrian detection for driver assistance</span></h1>
+  <p class="sub" data-lang="fr">Modèle <b>YOLOv8n</b> entraîné sur des scènes urbaines Cityscapes (projet PIF6004, UQTR) pour détecter les piétons et les cyclistes ou motards. Il s'exécute <b>dans votre navigateur</b> : vos images ne quittent pas votre appareil.</p>
+  <p class="sub" data-lang="en"><b>YOLOv8n</b> trained on Cityscapes street scenes (course project, UQTR) to detect pedestrians and riders. It runs <b>in your browser</b>: your images never leave your device.</p>
+
+  <div class="grid">
+    <div class="panel">
+      <div class="stage" id="stage">
+        <canvas id="canvas" width="640" height="480"></canvas>
+        <div class="status" id="status"><span data-lang="fr">Chargement du modèle (13 Mo)…</span><span data-lang="en">Loading the model (13 MB)…</span></div>
+      </div>
+      <div class="actions">
+        <button class="btn main" id="pick" type="button" disabled><span data-lang="fr">Choisir une image</span><span data-lang="en">Choose an image</span></button>
+        <button class="btn" id="example" type="button" disabled><span data-lang="fr">Image d'exemple</span><span data-lang="en">Example image</span></button>
+        <input type="file" id="file" accept="image/*" hidden>
+      </div>
+      <p class="muted" data-lang="fr">Vous pouvez aussi glisser une image sur la zone ci-dessus.</p>
+      <p class="muted" data-lang="en">You can also drop an image on the area above.</p>
+    </div>
+
+    <div class="panel">
+      <label class="slider"><span data-lang="fr">Seuil de confiance :</span><span data-lang="en">Confidence threshold:</span> <b id="confVal">0,25</b>
+        <input type="range" id="conf" min="0.05" max="0.9" step="0.05" value="0.25">
+      </label>
+      <div class="count"><span><span class="dot" style="background:var(--ped)"></span><span data-lang="fr">Piétons</span><span data-lang="en">Pedestrians</span></span><b id="nPed">–</b></div>
+      <div class="count"><span><span class="dot" style="background:var(--rider)"></span><span data-lang="fr">Cyclistes ou motards</span><span data-lang="en">Riders</span></span><b id="nRider">–</b></div>
+      <p class="muted" id="timing"></p>
+      <ul class="facts">
+        <li data-lang="fr">Entraînement : Cityscapes, 2 classes (<i>pedestrian</i>, <i>rider</i>), Ultralytics YOLOv8n.</li>
+        <li data-lang="en">Training: Cityscapes, 2 classes (<i>pedestrian</i>, <i>rider</i>), Ultralytics YOLOv8n.</li>
+        <li data-lang="fr">Exécution : ONNX Runtime Web (WebAssembly), seuil d'IoU de 0,7 pour la suppression des doublons.</li>
+        <li data-lang="en">Inference: ONNX Runtime Web (WebAssembly), non-maximum suppression at IoU 0.7.</li>
+        <li data-lang="fr">Le modèle a appris sur des vues de caméra embarquée : il est plus fiable sur des scènes de circulation que sur des portraits ou des gros plans.</li>
+        <li data-lang="en">It learned from dashcam views, so it works best on traffic scenes rather than portraits or close-ups.</li>
+      </ul>
+      <p class="muted"><a href="https://github.com/mireille-kafando/pedestrian-detection-adas"><span data-lang="fr">Code, résultats et limites connues →</span><span data-lang="en">Code, results and known limitations →</span></a></p>
+    </div>
+  </div>
+</main>
+
+<footer><div class="wrap">
+  <span data-lang="fr">Modèle et démo distribués sous licence AGPL-3.0, comme la bibliothèque Ultralytics. Image d'exemple fournie avec Ultralytics. Moteur d'inférence : ONNX Runtime Web (MIT).</span>
+  <span data-lang="en">Model and demo released under AGPL-3.0, like the Ultralytics library. Example image shipped with Ultralytics. Inference engine: ONNX Runtime Web (MIT).</span>
+  · <a href="../">Portfolio</a>
+</div></footer>
+
+<script src="ort/ort.wasm.min.js"></script>
+<script>
+(function () {
+  // --- langue (même préférence que le portfolio) ---
+  var langBtn = document.getElementById('lang');
+  function setLang(l) {
+    document.body.classList.toggle('en', l === 'en');
+    document.documentElement.lang = l;
+    langBtn.textContent = l === 'en' ? 'Français' : 'English';
+    try { localStorage.setItem('lang', l); } catch (e) {}
+    showConf(); showTiming();
+  }
+  langBtn.addEventListener('click', function () { setLang(document.body.classList.contains('en') ? 'fr' : 'en'); });
+  function en() { return document.body.classList.contains('en'); }
+
+  var CLASSES = ['pedestrian', 'rider'];
+  var COLORS = ['#d1495b', '#1f8a70'];
+  var IMGSZ = 640, STRIDE = 32, IOU = 0.7, MAX_DET = 300;
+
+  var canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
+  var stage = document.getElementById('stage'), statusEl = document.getElementById('status');
+  var confEl = document.getElementById('conf'), fileEl = document.getElementById('file');
+  var session = null, current = null, lastMs = null;
+
+  function setStatus(fr, enText) {
+    if (!fr) { statusEl.style.display = 'none'; return; }
+    statusEl.style.display = '';
+    statusEl.innerHTML = '<span data-lang="fr">' + fr + '</span><span data-lang="en">' + enText + '</span>';
+  }
+  function showConf() {
+    var v = parseFloat(confEl.value).toFixed(2);
+    document.getElementById('confVal').textContent = en() ? v : v.replace('.', ',');
+  }
+  function showTiming() {
+    var t = document.getElementById('timing');
+    if (lastMs === null) { t.textContent = ''; return; }
+    t.textContent = (en() ? 'Inference time: ' : "Temps d'inférence : ") + Math.round(lastMs) + ' ms';
+  }
+
+  // Redimensionnement « letterbox » rectangulaire, comme Ultralytics (multiple de 32, gris 114)
+  function preprocess(img) {
+    var w = img.naturalWidth, h = img.naturalHeight;
+    var r = Math.min(IMGSZ / w, IMGSZ / h);
+    var nw = Math.round(w * r), nh = Math.round(h * r);
+    var W = nw + ((IMGSZ - nw) % STRIDE), H = nh + ((IMGSZ - nh) % STRIDE);
+    var left = Math.round((W - nw) / 2 - 0.1), top = Math.round((H - nh) / 2 - 0.1);
+    var c = document.createElement('canvas'); c.width = W; c.height = H;
+    var x = c.getContext('2d');
+    x.fillStyle = 'rgb(114,114,114)'; x.fillRect(0, 0, W, H);
+    x.drawImage(img, left, top, nw, nh);
+    var px = x.getImageData(0, 0, W, H).data, n = W * H, data = new Float32Array(3 * n);
+    for (var i = 0; i < n; i++) {
+      data[i] = px[4 * i] / 255; data[n + i] = px[4 * i + 1] / 255; data[2 * n + i] = px[4 * i + 2] / 255;
+    }
+    return { tensor: new ort.Tensor('float32', data, [1, 3, H, W]), r: r, left: left, top: top, w: w, h: h };
+  }
+
+  function iou(a, b) {
+    var ix = Math.max(0, Math.min(a[2], b[2]) - Math.max(a[0], b[0]));
+    var iy = Math.max(0, Math.min(a[3], b[3]) - Math.max(a[1], b[1]));
+    var inter = ix * iy;
+    return inter / ((a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - inter);
+  }
+
+  // Sortie (1, 4 + classes, N) : cx, cy, w, h puis un score par classe
+  function postprocess(out, meta, conf) {
+    var d = out.data, N = out.dims[2], nc = out.dims[1] - 4, cand = [];
+    for (var i = 0; i < N; i++) {
+      var best = 0, k = 0;
+      for (var c = 0; c < nc; c++) { var s = d[(4 + c) * N + i]; if (s > best) { best = s; k = c; } }
+      if (best < conf) continue;
+      var cx = d[i], cy = d[N + i], bw = d[2 * N + i], bh = d[3 * N + i];
+      cand.push({ score: best, cls: k, box: [
+        Math.max(0, (cx - bw / 2 - meta.left) / meta.r), Math.max(0, (cy - bh / 2 - meta.top) / meta.r),
+        Math.min(meta.w, (cx + bw / 2 - meta.left) / meta.r), Math.min(meta.h, (cy + bh / 2 - meta.top) / meta.r)] });
+    }
+    cand.sort(function (a, b) { return b.score - a.score; });
+    var keep = [];
+    for (var j = 0; j < cand.length && keep.length < MAX_DET; j++) {
+      var ok = true;
+      for (var q = 0; q < keep.length; q++) {
+        if (keep[q].cls === cand[j].cls && iou(keep[q].box, cand[j].box) > IOU) { ok = false; break; }
+      }
+      if (ok) keep.push(cand[j]);
+    }
+    return keep;
+  }
+
+  function draw() {
+    if (!current) return;
+    var img = current.img, dets = postprocess(current.out, current.meta, parseFloat(confEl.value));
+    canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
+    ctx.drawImage(img, 0, 0);
+    var lw = Math.max(2, Math.round(Math.max(canvas.width, canvas.height) / 300));
+    var fs = Math.max(12, Math.round(lw * 6));
+    ctx.font = '600 ' + fs + 'px "Segoe UI", system-ui, sans-serif'; ctx.textBaseline = 'top';
+    var counts = [0, 0];
+    dets.forEach(function (det) {
+      counts[det.cls]++;
+      var b = det.box, col = COLORS[det.cls];
+      ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.strokeRect(b[0], b[1], b[2] - b[0], b[3] - b[1]);
+      var label = CLASSES[det.cls] + ' ' + det.score.toFixed(2), tw = ctx.measureText(label).width + 8;
+      var ty = b[1] - fs - 6 < 0 ? b[1] : b[1] - fs - 6;
+      var tx = Math.max(0, Math.min(b[0] - lw / 2, canvas.width - tw));  // étiquette toujours visible
+      ctx.fillStyle = col; ctx.fillRect(tx, ty, tw, fs + 6);
+      ctx.fillStyle = '#fff'; ctx.fillText(label, tx + 4, ty + 3);
+    });
+    document.getElementById('nPed').textContent = counts[0];
+    document.getElementById('nRider').textContent = counts[1];
+    window.__detections = dets;  // utile pour les tests automatisés
+  }
+
+  async function run(img) {
+    setStatus('Détection en cours…', 'Detecting…');
+    await new Promise(function (r) { setTimeout(r, 30); });
+    var meta = preprocess(img), t0 = performance.now();
+    var res = await session.run({ images: meta.tensor });
+    lastMs = performance.now() - t0; showTiming();
+    current = { img: img, meta: meta, out: res[session.outputNames[0]] };
+    setStatus(null); draw();
+  }
+
+  function loadUrl(url) {
+    var img = new Image();
+    img.onload = function () { run(img).catch(fail); };
+    img.onerror = function () { setStatus("Impossible de lire cette image.", 'Could not read this image.'); };
+    img.src = url;
+  }
+  function loadFile(f) { if (f && f.type.indexOf('image/') === 0) loadUrl(URL.createObjectURL(f)); }
+  function fail(e) {
+    console.error(e);
+    setStatus("Erreur pendant l'exécution du modèle.", 'The model failed to run.');
+  }
+
+  document.getElementById('pick').addEventListener('click', function () { fileEl.click(); });
+  fileEl.addEventListener('change', function () { loadFile(fileEl.files[0]); fileEl.value = ''; });
+  document.getElementById('example').addEventListener('click', function () { loadUrl('exemples/bus.jpg'); });
+  confEl.addEventListener('input', function () { showConf(); draw(); });
+  ['dragenter', 'dragover'].forEach(function (t) { stage.addEventListener(t, function (e) { e.preventDefault(); stage.classList.add('drag'); }); });
+  ['dragleave', 'drop'].forEach(function (t) { stage.addEventListener(t, function (e) { e.preventDefault(); stage.classList.remove('drag'); }); });
+  stage.addEventListener('drop', function (e) { loadFile(e.dataTransfer.files[0]); });
+
+  var saved = null; try { saved = localStorage.getItem('lang'); } catch (e) {}
+  setLang(saved === 'en' ? 'en' : 'fr');
+
+  ort.env.wasm.wasmPaths = new URL('ort/', location.href).href;
+  ort.env.wasm.numThreads = 1;  // GitHub Pages ne permet pas le multithreading WebAssembly
+  ort.InferenceSession.create('model/yolov8n_pietons.onnx', { executionProviders: ['wasm'] }).then(function (s) {
+    session = s;
+    document.getElementById('pick').disabled = false;
+    document.getElementById('example').disabled = false;
+    loadUrl('exemples/bus.jpg');
+  }).catch(function (e) {
+    console.error(e);
+    setStatus("Le modèle n'a pas pu être chargé dans ce navigateur.", 'The model could not be loaded in this browser.');
+  });
+})();
+</script>
+</body>
+</html>
