@@ -45,7 +45,7 @@
   .feature img{width:100%;border-radius:8px;border:1px solid var(--line);background:#fff}
   .tag{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--accent);font-weight:700}
   .feature h3,.card h3{margin:6px 0 10px;font-size:22px}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
   .card img{width:100%;height:180px;object-fit:contain;background:#fff;border-bottom:1px solid var(--line);padding:8px}
   .card .body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
@@ -147,6 +147,19 @@
       </article>
 
       <article class="card">
+        <img loading="lazy" src="assets/qa.png" alt="Rapport d'exécution pytest-html de la suite de tests">
+        <div class="body">
+          <div class="tag"><span data-lang="fr">Projet personnel · 2026</span><span data-lang="en">Personal project · 2026</span></div>
+          <h3><span data-lang="fr">Tests automatisés de ce portfolio (QA)</span><span data-lang="en">Automated testing of this portfolio (QA)</span></h3>
+          <p data-lang="fr">Plan de test et suite Playwright + pytest qui teste ce site et ses deux démos : parcours de bout en bout, tests d'API et HTTP, scénarios BDD en Gherkin, accessibilité. Chaque défaut trouvé a son rapport et son test de non-régression.</p>
+          <p data-lang="en">Test plan and Playwright + pytest suite testing this site and its two demos: end-to-end journeys, API and HTTP tests, Gherkin BDD scenarios, accessibility. Every defect found has a report and a regression test.</p>
+          <p class="result"><span data-lang="fr">Intégration continue quotidienne sur Chromium et Firefox</span><span data-lang="en">Daily continuous integration on Chromium and Firefox</span></p>
+          <div class="chips"><span>Playwright</span><span>pytest</span><span>pytest-bdd</span><span>API REST</span><span>GitHub Actions</span></div>
+          <a class="more" href="https://github.com/mireille-kafando/qa-playwright-portfolio"><span data-lang="fr">Voir le dépôt →</span><span data-lang="en">View repository →</span></a>
+        </div>
+      </article>
+
+      <article class="card">
         <img loading="lazy" src="assets/pieces.png" alt="Courbe d'exactitude du CNN">
         <div class="body">
           <div class="tag">MAP6014 · <span data-lang="fr">automne 2023</span><span data-lang="en">Fall 2023</span></div>
@@ -184,8 +197,8 @@
       <div><h3><span data-lang="fr">Langages de programmation</span><span data-lang="en">Programming languages</span></h3><p>Python ; Java, C# <span data-lang="fr">(notions)</span><span data-lang="en">(basic knowledge)</span></p></div>
       <div><h3><span data-lang="fr">Apprentissage automatique</span><span data-lang="en">Machine learning</span></h3><p>PyTorch, TensorFlow/Keras, Hugging Face Transformers, scikit-learn, imbalanced-learn, Ultralytics YOLO</p></div>
       <div><h3><span data-lang="fr">Données et statistiques</span><span data-lang="en">Data and statistics</span></h3><p>pandas, NumPy, SciPy, Matplotlib, Seaborn ; <span data-lang="fr">tests paramétriques et non paramétriques, ANOVA</span><span data-lang="en">parametric and non-parametric tests, ANOVA</span></p></div>
-      <div><h3><span data-lang="fr">Génie logiciel</span><span data-lang="en">Software engineering</span></h3><p><span data-lang="fr">Métriques de qualité (CK), vérification et validation, tests automatisés (pytest), intégration continue (GitHub Actions)</span><span data-lang="en">Quality metrics (CK), verification and validation, automated testing (pytest), continuous integration (GitHub Actions)</span></p></div>
-      <div><h3><span data-lang="fr">Outils</span><span data-lang="en">Tools</span></h3><p>Git, GitHub Actions, Google Colab, Jupyter, Streamlit, Gradio, Flask, ONNX Runtime, CVAT</p></div>
+      <div><h3><span data-lang="fr">Génie logiciel</span><span data-lang="en">Software engineering</span></h3><p><span data-lang="fr">Métriques de qualité (CK), vérification et validation, tests automatisés de bout en bout et d'API (Playwright, pytest), BDD (Gherkin), intégration continue (GitHub Actions)</span><span data-lang="en">Quality metrics (CK), verification and validation, automated end-to-end and API testing (Playwright, pytest), BDD (Gherkin), continuous integration (GitHub Actions)</span></p></div>
+      <div><h3><span data-lang="fr">Outils</span><span data-lang="en">Tools</span></h3><p>Git, GitHub Actions, Playwright, Google Colab, Jupyter, Streamlit, Gradio, Flask, ONNX Runtime, CVAT</p></div>
       <div><h3><span data-lang="fr">Langues</span><span data-lang="en">Languages spoken</span></h3><p><span data-lang="fr">Français (langue maternelle), anglais</span><span data-lang="en">French (native), English</span></p></div>
     </div>
   </section>
