@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Démo : détection de piétons (YOLOv8) — Mireille Kafando</title>
-<meta name="description" content="Démo en ligne : détection de piétons et de cyclistes avec YOLOv8n, exécutée directement dans le navigateur.">
+<meta name="description" content="Démo en ligne : détection de piétons et de cyclistes avec YOLOv8n (v2, mAP@0,5 = 0,86 sur un test séparé), exécutée directement dans le navigateur.">
 <meta property="og:title" content="Démo : détection de piétons avec YOLOv8">
-<meta property="og:description" content="Modèle YOLOv8n entraîné sur Cityscapes, exécuté dans le navigateur avec ONNX Runtime Web.">
+<meta property="og:description" content="YOLOv8n (v2, mAP@0,5 = 0,86 sur un test séparé) exécuté dans le navigateur avec ONNX Runtime Web.">
 <meta property="og:url" content="https://mireille-kafando.github.io/demo-pietons/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231d2433'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' fill='white' text-anchor='middle'%3EMK%3C/text%3E%3C/svg%3E">
 <style>
@@ -52,8 +52,8 @@
 
 <main class="wrap">
   <h1><span data-lang="fr">Détection de piétons pour l'aide à la conduite</span><span data-lang="en">Pedestrian detection for driver assistance</span></h1>
-  <p class="sub" data-lang="fr">Modèle <b>YOLOv8n</b> entraîné sur des scènes urbaines Cityscapes (projet PIF6004, UQTR) pour détecter les piétons et les cyclistes ou motards. Il s'exécute <b>dans votre navigateur</b> : vos images ne quittent pas votre appareil.</p>
-  <p class="sub" data-lang="en"><b>YOLOv8n</b> trained on Cityscapes street scenes (course project, UQTR) to detect pedestrians and riders. It runs <b>in your browser</b>: your images never leave your device.</p>
+  <p class="sub" data-lang="fr">Modèle <b>YOLOv8n</b> qui détecte les piétons et les cyclistes ou motards dans des scènes de rue (projet PIF6004, UQTR). La <b>version 2</b> part de poids pré-entraînés sur COCO et atteint un <b>mAP@0,5 de 0,86</b> sur un jeu de test séparé, contre 0,55 pour la version remise. Le modèle s'exécute <b>dans votre navigateur</b> : vos images ne quittent pas votre appareil.</p>
+  <p class="sub" data-lang="en"><b>YOLOv8n</b> detecting pedestrians and riders in street scenes (course project, UQTR). <b>Version 2</b> is fine-tuned from COCO-pretrained weights and reaches <b>mAP@0.5 = 0.86</b> on a held-out test set, versus 0.55 for the submitted version. It runs <b>in your browser</b>: your images never leave your device.</p>
 
   <div class="grid">
     <div class="panel">
@@ -71,6 +71,12 @@
     </div>
 
     <div class="panel">
+      <label class="slider"><span data-lang="fr">Modèle :</span><span data-lang="en">Model:</span>
+        <select id="version" style="width:100%;margin-top:4px;padding:6px;font:inherit;font-size:15px;border:1px solid var(--line);border-radius:8px;background:var(--card)">
+          <option value="v2">v2 (2026) · mAP@0,5 0,86</option>
+          <option value="v1">v1 (2024) · mAP@0,5 0,55</option>
+        </select>
+      </label>
       <label class="slider"><span data-lang="fr">Seuil de confiance :</span><span data-lang="en">Confidence threshold:</span> <b id="confVal">0,25</b>
         <input type="range" id="conf" min="0.05" max="0.9" step="0.05" value="0.25">
       </label>
@@ -78,12 +84,12 @@
       <div class="count"><span><span class="dot" style="background:var(--rider)"></span><span data-lang="fr">Cyclistes ou motards</span><span data-lang="en">Riders</span></span><b id="nRider">–</b></div>
       <p class="muted" id="timing"></p>
       <ul class="facts">
-        <li data-lang="fr">Entraînement : Cityscapes, 2 classes (<i>pedestrian</i>, <i>rider</i>), Ultralytics YOLOv8n.</li>
-        <li data-lang="en">Training: Cityscapes, 2 classes (<i>pedestrian</i>, <i>rider</i>), Ultralytics YOLOv8n.</li>
+        <li data-lang="fr">Données : 75 images de rue annotées à la main (CVAT), 2 classes (<i>pedestrian</i>, <i>rider</i>). v2 : 48 images d'entraînement, 12 de sélection, 14 de test.</li>
+        <li data-lang="en">Data: 75 hand-annotated street images (CVAT), 2 classes (<i>pedestrian</i>, <i>rider</i>). v2: 48 training, 12 selection and 14 test images.</li>
         <li data-lang="fr">Exécution : ONNX Runtime Web (WebAssembly), seuil d'IoU de 0,7 pour la suppression des doublons.</li>
         <li data-lang="en">Inference: ONNX Runtime Web (WebAssembly), non-maximum suppression at IoU 0.7.</li>
-        <li data-lang="fr">Le modèle a appris sur des vues de caméra embarquée : il est plus fiable sur des scènes de circulation que sur des portraits ou des gros plans.</li>
-        <li data-lang="en">It learned from dashcam views, so it works best on traffic scenes rather than portraits or close-ups.</li>
+        <li data-lang="fr">Les scores mesurés sur 14 images de test restent indicatifs : le jeu de données est petit.</li>
+        <li data-lang="en">Scores measured on 14 test images are indicative only: the dataset is small.</li>
       </ul>
       <p class="muted"><a href="https://github.com/mireille-kafando/pedestrian-detection-adas"><span data-lang="fr">Code, résultats et limites connues →</span><span data-lang="en">Code, results and known limitations →</span></a></p>
     </div>
@@ -107,6 +113,11 @@
     langBtn.textContent = l === 'en' ? 'Français' : 'English';
     try { localStorage.setItem('lang', l); } catch (e) {}
     showConf(); showTiming();
+    var o = document.querySelectorAll('#version option');
+    if (o.length) {
+      o[0].textContent = l === 'en' ? 'v2 (2026) · mAP@0.5 0.86' : 'v2 (2026) · mAP@0,5 0,86';
+      o[1].textContent = l === 'en' ? 'v1 (2024) · mAP@0.5 0.55' : 'v1 (2024) · mAP@0,5 0,55';
+    }
   }
   langBtn.addEventListener('click', function () { setLang(document.body.classList.contains('en') ? 'fr' : 'en'); });
   function en() { return document.body.classList.contains('en'); }
@@ -118,7 +129,8 @@
   var canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
   var stage = document.getElementById('stage'), statusEl = document.getElementById('status');
   var confEl = document.getElementById('conf'), fileEl = document.getElementById('file');
-  var session = null, current = null, lastMs = null;
+  var sessions = {}, session = null, current = null, lastMs = null, lastImg = null;
+  var versionEl = document.getElementById('version');
 
   function setStatus(fr, enText) {
     if (!fr) { statusEl.style.display = 'none'; return; }
@@ -192,15 +204,25 @@
     var lw = Math.max(2, Math.round(Math.max(canvas.width, canvas.height) / 300));
     var fs = Math.max(12, Math.round(lw * 6));
     ctx.font = '600 ' + fs + 'px "Segoe UI", system-ui, sans-serif'; ctx.textBaseline = 'top';
-    var counts = [0, 0];
+    var counts = [0, 0], places = [], lh = fs + 6;
     dets.forEach(function (det) {
       counts[det.cls]++;
+      var b = det.box;
+      ctx.strokeStyle = COLORS[det.cls]; ctx.lineWidth = lw; ctx.strokeRect(b[0], b[1], b[2] - b[0], b[3] - b[1]);
+    });
+    // Étiquettes ensuite, par score décroissant, décalées vers le bas si elles en chevauchent une autre
+    dets.forEach(function (det) {
       var b = det.box, col = COLORS[det.cls];
-      ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.strokeRect(b[0], b[1], b[2] - b[0], b[3] - b[1]);
       var label = CLASSES[det.cls] + ' ' + det.score.toFixed(2), tw = ctx.measureText(label).width + 8;
-      var ty = b[1] - fs - 6 < 0 ? b[1] : b[1] - fs - 6;
-      var tx = Math.max(0, Math.min(b[0] - lw / 2, canvas.width - tw));  // étiquette toujours visible
-      ctx.fillStyle = col; ctx.fillRect(tx, ty, tw, fs + 6);
+      var tx = Math.max(0, Math.min(b[0] - lw / 2, canvas.width - tw));
+      var ty = b[1] - lh < 0 ? b[1] : b[1] - lh;
+      for (var essai = 0; essai < 20; essai++) {
+        var gene = places.some(function (r) { return tx < r[0] + r[2] && r[0] < tx + tw && ty < r[1] + lh && r[1] < ty + lh; });
+        if (!gene) break;
+        ty += lh;
+      }
+      places.push([tx, ty, tw]);
+      ctx.fillStyle = col; ctx.fillRect(tx, ty, tw, lh);
       ctx.fillStyle = '#fff'; ctx.fillText(label, tx + 4, ty + 3);
     });
     document.getElementById('nPed').textContent = counts[0];
@@ -214,7 +236,7 @@
     var meta = preprocess(img), t0 = performance.now();
     var res = await session.run({ images: meta.tensor });
     lastMs = performance.now() - t0; showTiming();
-    current = { img: img, meta: meta, out: res[session.outputNames[0]] };
+    current = { img: img, meta: meta, out: res[session.outputNames[0]] }; lastImg = img;
     setStatus(null); draw();
   }
 
@@ -243,15 +265,33 @@
 
   ort.env.wasm.wasmPaths = new URL('ort/', location.href).href;
   ort.env.wasm.numThreads = 1;  // GitHub Pages ne permet pas le multithreading WebAssembly
-  ort.InferenceSession.create('model/yolov8n_pietons.onnx', { executionProviders: ['wasm'] }).then(function (s) {
-    session = s;
-    document.getElementById('pick').disabled = false;
-    document.getElementById('example').disabled = false;
-    loadUrl('exemples/bus.jpg');
-  }).catch(function (e) {
-    console.error(e);
-    setStatus("Le modèle n'a pas pu être chargé dans ce navigateur.", 'The model could not be loaded in this browser.');
+  function charger(version) {
+    if (!sessions[version]) {
+      sessions[version] = ort.InferenceSession.create('model/' + version + '.onnx', { executionProviders: ['wasm'] });
+    }
+    return sessions[version];
+  }
+  function choisir(version, apres) {
+    ['pick', 'example'].forEach(function (id) { document.getElementById(id).disabled = true; });
+    versionEl.disabled = true;
+    setStatus('Chargement du modèle (13 Mo)…', 'Loading the model (13 MB)…');
+    charger(version).then(function (s) {
+      session = s; window.__version = version;
+      ['pick', 'example'].forEach(function (id) { document.getElementById(id).disabled = false; });
+      versionEl.disabled = false;
+      setStatus(null);
+      apres();
+    }).catch(function (e) {
+      console.error(e); delete sessions[version];
+      versionEl.disabled = false;
+      setStatus("Le modèle n'a pas pu être chargé dans ce navigateur.", 'The model could not be loaded in this browser.');
+    });
+  }
+  versionEl.addEventListener('change', function () {
+    window.__detections = undefined;
+    choisir(versionEl.value, function () { if (lastImg) run(lastImg).catch(fail); else loadUrl('exemples/bus.jpg'); });
   });
+  choisir('v2', function () { loadUrl('exemples/bus.jpg'); });
 })();
 </script>
 </body>
