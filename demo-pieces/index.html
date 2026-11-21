@@ -83,8 +83,8 @@
       <ul class="facts">
         <li data-lang="fr">Données : Indian Coin Denomination Dataset (ICDD), 780 photos, partagées par pièce physique : le test ne contient que des pièces jamais vues.</li>
         <li data-lang="en">Data: Indian Coin Denomination Dataset (ICDD), 780 photos, split by physical coin: the test set only holds unseen coins.</li>
-        <li data-lang="fr">Modèle : VGG16 gelé + une couche de sortie, entraîné avec 350 photos de 2 roupies en complément. 69,2 % d'exactitude sur 120 photos de test (68,3 % pour cette version compressée à 15 Mo).</li>
-        <li data-lang="en">Model: frozen VGG16 + one output layer, trained with 350 extra 2-rupee photos. 69.2% accuracy on 120 test photos (68.3% for this version compressed to 15 MB).</li>
+        <li data-lang="fr">Modèle : VGG16 gelé + une couche de sortie, entraîné avec 350 photos de 2 roupies en complément. 69,2 % d'exactitude sur 120 photos de test (68,3 % pour cette version compressée à 15 Mo) ; 64,6 % en validation croisée par pièce (4 plis, 480 photos). Les 2 roupies restent la classe la plus difficile.</li>
+        <li data-lang="en">Model: frozen VGG16 + one output layer, trained with 350 extra 2-rupee photos. 69.2% accuracy on 120 test photos (68.3% for this version compressed to 15 MB); 64.6% in coin-wise 4-fold cross-validation (480 photos). 2-rupee coins remain the hardest class.</li>
         <li data-lang="fr">Limite connue : l'ancienne pièce dorée de 2 roupies à 11 côtés n'est pas reconnue, car aucune pièce de ce modèle n'est dans les données d'entraînement.</li>
         <li data-lang="en">Known limitation: the old 11-sided golden 2-rupee coin is not recognised, as no coin of that design is in the training data.</li>
         <li data-lang="fr">Le modèle choisit toujours l'une des 4 valeurs, même pour une image qui n'est pas une pièce : une probabilité élevée n'est pas une garantie.</li>
