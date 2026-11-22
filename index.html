@@ -51,6 +51,8 @@
   .card .body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
   .card h3{font-size:19px}
   .card p{margin:0 0 12px;font-size:16px}
+  .grid > .card:last-child:nth-child(odd){grid-column:1 / -1;display:grid;grid-template-columns:1fr 1fr}
+  .grid > .card:last-child:nth-child(odd) img{height:240px;align-self:center;border-bottom:0}
   .result{font-weight:600}
   .chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 14px}
   .chips span{border:1px solid var(--line);border-radius:6px;padding:1px 8px;font-size:13px;color:var(--muted)}
@@ -68,6 +70,7 @@
   @media (max-width:860px){
     .feature{grid-template-columns:1fr}
     .grid{grid-template-columns:1fr}
+    .grid > .card:last-child:nth-child(odd){display:flex}
     .skills{grid-template-columns:1fr}
     nav a{display:none}
     .hero h1{font-size:34px}
@@ -160,13 +163,27 @@
       </article>
 
       <article class="card">
+        <img loading="lazy" src="assets/accidents.png" alt="Graphique du tableau de bord : part des accidents de piétons mortels ou graves selon la vitesse permise">
+        <div class="body">
+          <div class="tag"><span data-lang="fr">Projet personnel · 2026</span><span data-lang="en">Personal project · 2026</span></div>
+          <h3><span data-lang="fr">Accidents de la route au Québec : analyse SQL</span><span data-lang="en">Road accidents in Québec: SQL analysis</span></h3>
+          <p data-lang="fr">1,7 million de rapports d'accident de la SAAQ nettoyés et chargés dans une base SQL en étoile, 9 requêtes commentées (CTE, fonctions de fenêtre), contrôles de qualité des données en CI et tableau de bord interactif sur les piétons et les cyclistes.</p>
+          <p data-lang="en">1.7 million SAAQ accident reports cleaned and loaded into a SQL star schema, 9 commented queries (CTEs, window functions), data-quality checks in CI and an interactive dashboard on pedestrians and cyclists.</p>
+          <p class="result"><span data-lang="fr">Piétons : 12 % d'accidents mortels ou graves à 50 km/h, 53 % à 100 km/h</span><span data-lang="en">Pedestrians: 12% of accidents fatal or serious at 50 km/h, 53% at 100 km/h</span></p>
+          <div class="chips"><span>SQL</span><span>SQLite</span><span>Python</span><span>pytest</span><span>GitHub Actions</span><span>Data viz</span></div>
+          <a class="more" href="accidents-quebec/"><span data-lang="fr">▶ Voir le tableau de bord</span><span data-lang="en">▶ Open the dashboard</span></a>
+          <a class="more" style="margin-top:6px" href="https://github.com/mireille-kafando/accidents-routiers-quebec"><span data-lang="fr">Voir le dépôt →</span><span data-lang="en">View repository →</span></a>
+        </div>
+      </article>
+
+      <article class="card">
         <img loading="lazy" src="assets/pieces.png" alt="Courbe d'exactitude du CNN">
         <div class="body">
           <div class="tag">MAP6014 · <span data-lang="fr">automne 2023</span><span data-lang="en">Fall 2023</span></div>
           <h3><span data-lang="fr">Classification de pièces de monnaie</span><span data-lang="en">Coin classification</span></h3>
           <p data-lang="fr">VGG16 par transfert et CNN séquentiel sur des pièces indiennes et brésiliennes, avec augmentation de données et interface Streamlit. En 2026, un défaut d'évaluation corrigé, le protocole VGG16 réexécuté sur des pièces jamais vues (59 % → 67 % en validation croisée par pièce) et des variantes comparées par test de McNemar.</p>
           <p data-lang="en">Transfer learning with VGG16 and a sequential CNN on Indian and Brazilian coins, with data augmentation and a Streamlit app. In 2026, an evaluation bug fixed, the VGG16 protocol re-run on unseen coins (59% → 67% in coin-wise cross-validation) and variants compared with McNemar's test.</p>
-          <p class="result"><span data-lang="fr">98,1 % d'exactitude en test (5 classes)</span><span data-lang="en">98.1% test accuracy (5 classes)</span></p>
+          <p class="result"><span data-lang="fr">VGG16 réexécuté : 59 % → 67 % en validation croisée (McNemar, p = 0,001)</span><span data-lang="en">VGG16 re-run: 59% → 67% in cross-validation (McNemar, p = 0.001)</span></p>
           <div class="chips"><span>TensorFlow/Keras</span><span>Albumentations</span><span>Streamlit</span><span>ONNX</span></div>
           <a class="more" href="demo-pieces/"><span data-lang="fr">▶ Essayer la démo en ligne</span><span data-lang="en">▶ Try the live demo</span></a>
           <a class="more" style="margin-top:6px" href="https://github.com/mireille-kafando/coin-classification-cnn"><span data-lang="fr">Voir le dépôt →</span><span data-lang="en">View repository →</span></a>
@@ -196,9 +213,9 @@
     <div class="skills">
       <div><h3><span data-lang="fr">Langages de programmation</span><span data-lang="en">Programming languages</span></h3><p>Python ; Java, C# <span data-lang="fr">(notions)</span><span data-lang="en">(basic knowledge)</span></p></div>
       <div><h3><span data-lang="fr">Apprentissage automatique</span><span data-lang="en">Machine learning</span></h3><p>PyTorch, TensorFlow/Keras, Hugging Face Transformers, scikit-learn, imbalanced-learn, Ultralytics YOLO</p></div>
-      <div><h3><span data-lang="fr">Données et statistiques</span><span data-lang="en">Data and statistics</span></h3><p>pandas, NumPy, SciPy, Matplotlib, Seaborn ; <span data-lang="fr">tests paramétriques et non paramétriques, ANOVA</span><span data-lang="en">parametric and non-parametric tests, ANOVA</span></p></div>
+      <div><h3><span data-lang="fr">Données et statistiques</span><span data-lang="en">Data and statistics</span></h3><p>SQL, pandas, NumPy, SciPy, Matplotlib, Seaborn ; <span data-lang="fr">tests paramétriques et non paramétriques, ANOVA</span><span data-lang="en">parametric and non-parametric tests, ANOVA</span></p></div>
       <div><h3><span data-lang="fr">Génie logiciel</span><span data-lang="en">Software engineering</span></h3><p><span data-lang="fr">Métriques de qualité (CK), vérification et validation, tests automatisés de bout en bout et d'API (Playwright, pytest), BDD (Gherkin), intégration continue (GitHub Actions)</span><span data-lang="en">Quality metrics (CK), verification and validation, automated end-to-end and API testing (Playwright, pytest), BDD (Gherkin), continuous integration (GitHub Actions)</span></p></div>
-      <div><h3><span data-lang="fr">Outils</span><span data-lang="en">Tools</span></h3><p>Git, GitHub Actions, Playwright, Google Colab, Jupyter, Streamlit, Gradio, Flask, ONNX Runtime, CVAT</p></div>
+      <div><h3><span data-lang="fr">Outils</span><span data-lang="en">Tools</span></h3><p>Git, GitHub Actions, Playwright, Google Colab, Jupyter, Streamlit, Gradio, Flask, ONNX Runtime, CVAT, SQLite</p></div>
       <div><h3><span data-lang="fr">Langues</span><span data-lang="en">Languages spoken</span></h3><p><span data-lang="fr">Français (langue maternelle), anglais</span><span data-lang="en">French (native), English</span></p></div>
     </div>
   </section>
